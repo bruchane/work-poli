@@ -1,0 +1,59 @@
+version: '3.3'
+services:
+
+  #Nginx Container
+  web-job:
+    image: nginx:alpine
+    container_name: web-job
+    tty: true
+    ports:
+      - 8888:80
+    volumes:
+      - ./src:/var/www/html/
+      - ./nginx/default.conf/:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - dbpoli
+      - backend
+    networks:
+      - poli-network
+
+  #database Container
+  dbpoli:
+    image: mysql:8.0.13
+    restart: always
+    tty: true
+    container_name: dbpoli
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      SERVICE_TAGS: dev
+      SERVICE_NAME: dbpoli
+    ports:
+      - ${PORT}:3306
+    volumes:
+      - poli_db:/var/lib/mysql
+    networks:
+      - poli-network
+
+  #Backend Container
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: backend
+    restart: always
+    volumes:
+      - ./src:/var/www/html/
+    ports:
+      - 9000:80
+    networks:
+      - poli-network
+
+#Docker Networks
+networks:
+  poli-network:
+    driver: bridge
+
+#Docker volumes
+volumes:
+  poli_db:
