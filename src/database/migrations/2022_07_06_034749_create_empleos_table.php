@@ -15,7 +15,7 @@ class CreateEmpleosTable extends Migration
     {
         Schema::create('empleos', function (Blueprint $table) {
             $table->id();
-            $table->string('rol');
+            $table->string('rol')->unique();
             $table->integer('experiencia');
             $table->integer('sueldo');
             $table->timestamps();

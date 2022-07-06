@@ -18,3 +18,13 @@ use App\Http\Controllers\Api\EmpleoController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::controller(PersonaController::class)->group(function(){
+    Route::post('/persona', 'store');
+    Route::get('/persona/{id}', 'show');
+});
+
+Route::controller(EmpleoController::class)->group(function(){
+    Route::post('/empleo', 'create');
+    Route::get('/empleo/{id}', 'show');
+});
