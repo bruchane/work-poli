@@ -2,9 +2,9 @@ version: '3.3'
 services:
 
   #Nginx Container
-  web-job:
+  web-poli:
     image: nginx:alpine
-    container_name: web-job
+    container_name: web-poli
     tty: true
     ports:
       - 8888:80
@@ -13,7 +13,7 @@ services:
       - ./nginx/default.conf/:/etc/nginx/conf.d/default.conf
     depends_on:
       - dbpoli
-      - backend
+      - backend-poli
     networks:
       - poli-network
 
@@ -36,11 +36,11 @@ services:
       - poli-network
 
   #Backend Container
-  backend:
+  backend-poli:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: backend
+    container_name: backend-poli
     restart: always
     volumes:
       - ./src:/var/www/html/
